@@ -113,34 +113,165 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        switch(side){
+            case NORTH:
         for (int col = 0; col < board.size(); col++ ){
-            for (int row = 0; row < board.size(); row++ ){
+            for (int row = board.size()-1; row > -1; row--){
                 Tile t = board.tile(col,row);
                 int temp = 1;
-                while(t == null & row+temp < board.size()){
-//                    board.move(col, board.size()-1, t);
-                    t = board.tile(col,row+temp);
+                while(t == null & row-temp > -1){
+                    t = board.tile(col,row-temp);
                     if(t != null){
                         board.move(col, row, t);
                         changed = true;}
                     temp++;
                 }
-                if (t != null & row != board.size()-1){
-                    for(int add = 1; add+row < board.size(); add++ ){
-                        Tile t_add = board.tile(col,row+add);
-                        if(t_add == null){
+                Tile t_add = board.tile(col, row );
+                if (t != null & row != 0){
+                    for (int add = -1; row + add > -1; add--) {
+                        t_add = board.tile(col, row + add);
+                        if (t_add == null) {
                             continue;
+                        } else {
+                            if (t_add.value() == t.value()) {
+                                board.move(col, row, t_add);
+                                changed = true;
+                                score += 2 * t.value();
+                                break;
+                            } else {
+                                if(add!=-1){
+                                board.move(col, row-1, t_add);
+                                changed = true;
+                                break;} else{
+                                break;}
+                            }
                         }
-                        else {if(t_add.value() == t.value()){
-                            board.move(col, row+add, t);
-                            changed = true;
-                            score += 2*t.value();
-                        }else{ continue;
-                        }}
                     }
                 }
             }
         }
+        break;
+
+            case SOUTH:
+                for (int col = 0; col < board.size(); col++ ){
+                    for (int row = 0; row < board.size(); row++){
+                        Tile t = board.tile(col,row);
+                        int temp = 1;
+                        while(t == null & row+temp < board.size()){
+                            t = board.tile(col,row+temp);
+                            if(t != null){
+                                board.move(col, row, t);
+                                changed = true;}
+                            temp++;
+                        }
+                        Tile t_add = board.tile(col, row );
+                        if (t != null & row != board.size()-1){
+                            for (int add = 1; row + add < board.size(); add++) {
+                                t_add = board.tile(col, row + add);
+                                if (t_add == null) {
+                                    continue;
+                                } else {
+                                    if (t_add.value() == t.value()) {
+                                        board.move(col, row, t_add);
+                                        changed = true;
+                                        score += 2 * t.value();
+                                        break;
+                                    } else {
+                                        if(add!=1){
+                                            board.move(col, row+1, t_add);
+                                            changed = true;
+                                            break;} else{
+                                            break;}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case EAST:
+                for (int row = 0; row < board.size(); row++ ){
+                    for (int col = board.size()-1; col > -1; col--){
+                        Tile t = board.tile(col,row);
+                        int temp = 1;
+                        while(t == null & col-temp > -1){
+                            t = board.tile(col-temp,row);
+                            if(t != null){
+                                board.move(col, row, t);
+                                changed = true;}
+                            temp++;
+                        }
+                        Tile t_add = board.tile(col, row );
+                        if (t != null & col != 0){
+                            for (int add = -1; col + add > -1; add--) {
+                                t_add = board.tile(col+ add, row );
+                                if (t_add == null) {
+                                    continue;
+                                } else {
+                                    if (t_add.value() == t.value()) {
+                                        board.move(col, row, t_add);
+                                        changed = true;
+                                        score += 2 * t.value();
+                                        break;
+                                    } else {
+                                        if(add!=-1){
+                                            board.move(col-1, row, t_add);
+                                            changed = true;
+                                            break;} else{
+                                            break;}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case WEST:
+                for (int row = 0; row < board.size(); row++ ){
+                    for (int col = 0; col < board.size(); col++){
+                        Tile t = board.tile(col,row);
+                        int temp = 1;
+                        while(t == null & col+temp < board.size()){
+                            t = board.tile(col+temp,row);
+                            if(t != null){
+                                board.move(col, row, t);
+                                changed = true;}
+                            temp++;
+                        }
+                        Tile t_add = board.tile(col, row );
+                        if (t != null & col != board.size()-1){
+                            for (int add = 1; col + add < board.size(); add++) {
+                                t_add = board.tile(col+ add, row );
+                                if (t_add == null) {
+                                    continue;
+                                } else {
+                                    if (t_add.value() == t.value()) {
+                                        board.move(col, row, t_add);
+                                        changed = true;
+                                        score += 2 * t.value();
+                                        break;
+                                    } else {
+                                        if(add!=1){
+                                            board.move(col+1, row, t_add);
+                                            changed = true;
+                                            break;} else{
+                                            break;}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+        }
+
+
+
+
+
 //        checkGameOver();
         if (changed) {
             setChanged();
