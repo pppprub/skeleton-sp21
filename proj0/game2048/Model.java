@@ -113,8 +113,35 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-
-        checkGameOver();
+        for (int col = 0; col < board.size(); col++ ){
+            for (int row = 0; row < board.size(); row++ ){
+                Tile t = board.tile(col,row);
+                int temp = 1;
+                while(t == null & row+temp < board.size()){
+//                    board.move(col, board.size()-1, t);
+                    t = board.tile(col,row+temp);
+                    if(t != null){
+                        board.move(col, row, t);
+                        changed = true;}
+                    temp++;
+                }
+                if (t != null & row != board.size()-1){
+                    for(int add = 1; add+row < board.size(); add++ ){
+                        Tile t_add = board.tile(col,row+add);
+                        if(t_add == null){
+                            continue;
+                        }
+                        else {if(t_add.value() == t.value()){
+                            board.move(col, row+add, t);
+                            changed = true;
+                            score += 2*t.value();
+                        }else{ continue;
+                        }}
+                    }
+                }
+            }
+        }
+//        checkGameOver();
         if (changed) {
             setChanged();
         }
@@ -193,18 +220,30 @@ public class Model extends Observable {
                 }
                 else {
                     if (col != b.size()-1 & row != b.size()-1) {
-                        if (b.tile(col,row).value() == b.tile(col+1,row).value()
+                        if(b.tile(col+1,row) == null| b.tile(col,row+1) == null){
+                            decision = true;
+                            break;
+                        }
+                        else if (b.tile(col,row).value() == b.tile(col+1,row).value()
                                 | b.tile(col,row).value() == b.tile(col,row+1).value()){
                              decision = true;
                              break;
                             }
                     } else if (col != b.size()-1 & row == b.size()-1) {
-                        if (b.tile(col,row).value() == b.tile(col+1,row).value()){
+                        if(b.tile(col+1,row) == null){
+                            decision = true;
+                            break;
+                        }
+                        else if (b.tile(col,row).value() == b.tile(col+1,row).value()){
                             decision = true;
                             break;
                         }
                     } else if (col == b.size()-1 & row != b.size()-1) {
-                        if (b.tile(col,row).value() == b.tile(col,row+1).value()){
+                        if(b.tile(col,row+1) == null){
+                            decision = true;
+                            break;
+                        }
+                        else if (b.tile(col,row).value() == b.tile(col,row+1).value()){
                             decision = true;
                             break;
                         } else {}
