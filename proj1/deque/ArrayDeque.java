@@ -46,6 +46,9 @@ public class ArrayDeque<T> {
         }
     }
 
+    public int size(){
+        return this.size;
+    }
     public void resize(){
 
     }
