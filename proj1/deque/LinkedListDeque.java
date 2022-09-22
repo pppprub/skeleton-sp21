@@ -90,7 +90,7 @@ public class LinkedListDeque<T> {
             return null;
         }else {
             TNode currentNode = sentinel;
-            for(int i = 0; i< index; i++){
+            for(int i = 0; i<= index; i++){
                 currentNode = currentNode.next;
             }
             return currentNode.item;
