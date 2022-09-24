@@ -18,34 +18,39 @@ public class ArrayDeque<T> {
     }
 
     public void addFirst(T item) {
-        if (IsFull()) {
-            resize();
-        }
+//        if (IsFull()) {
+//            resize();
+//        }
         items[nextFirst] = item;
         //if (nextFirst == nextLast){
         if (nextFirst == 0) {
-            nextFirst = nextFirst + items.length;
+            nextFirst = nextFirst + items.length - 1;
+        } else {
+            nextFirst--;
         }
-        nextFirst--;
         size++;
+        resize();
     }
 
     public void addLast(T item) {
-        if (IsFull()) {
-            resize();
-        }
+//        if (IsFull()) {
+//            resize();
+//        }
         items[nextLast] = item;
-        if (nextLast == items.length) {
-            nextLast = nextLast - items.length;
+        if (nextLast == items.length - 1) {
+            nextLast = nextLast - items.length + 1;
+        } else {
+            nextLast++;
         }
-        nextLast++;
         size++;
+        resize();
     }
 
     public T remove(int index) {
         T remove_value = items[index];
         items[index] = null;
         size--;
+        resize();
         return remove_value;
     }
 
@@ -54,14 +59,14 @@ public class ArrayDeque<T> {
         if (nextLast != 0) {
             index_Last = nextLast - 1;
         } else {
-            index_Last = items.length;
+            index_Last = items.length - 1;
         }
         return index_Last;
     }
 
     private int get_First_index() {
         int index_First;
-        if (nextFirst != items.length) {
+        if (nextFirst != items.length - 1) {
             index_First = nextFirst + 1;
         } else {
             index_First = 0;
@@ -72,7 +77,7 @@ public class ArrayDeque<T> {
     public T removeFirst() {
         if (size > 0) {
             int index_First = get_First_index();
-//            if(nextFirst != items.length){
+//            if(nextFirst != items.length - 1){
 //            index_First = nextFirst + 1;
 //            }else{
 //                index_First = 0;
@@ -91,7 +96,7 @@ public class ArrayDeque<T> {
 //            if(nextLast != 0){
 //                index_Last = nextLast - 1;
 //            }else{
-//                index_Last = items.length;
+//                index_Last = items.length - 1;
 //            }
             nextLast = index_Last;
             return remove(index_Last);
@@ -140,24 +145,25 @@ public class ArrayDeque<T> {
         return this.size;
     }
 
-    private float Usage(){
-        return size / items.length;
+    private float Usage() {
+        return (float) size / items.length;
     }
+
     public void resize() {
-        if(Usage() > 0.75){
+        if (Usage() > 0.75) {
             resize_To(items.length * 2);
-        } else if (Usage() < 0.25 && items.length >= 16){
+        } else if (Usage() < 0.25 && items.length >= 16) {
             resize_To(items.length / 2);
         }
     }
 
-    private void resize_To(int Storage){
-        T[]  Newitems = (T[]) new Object[Storage];
+    private void resize_To(int Storage) {
+        T[] Newitems = (T[]) new Object[Storage];
         int First_index = get_First_index();
-        int Last_index  = get_Last_index();
-        if(First_index > Last_index){
-            System.arraycopy(items, First_index, Newitems, 4, size - First_index);
-            System.arraycopy(items, 0, Newitems, 4 + size - First_index, Last_index +1);
+        int Last_index = get_Last_index();
+        if (First_index > Last_index) {
+            System.arraycopy(items, First_index, Newitems, 4, items.length - First_index);
+            System.arraycopy(items, 0, Newitems, 4 + items.length - First_index, Last_index + 1);
         } else {
             System.arraycopy(items, First_index, Newitems, 4, size);
         }
