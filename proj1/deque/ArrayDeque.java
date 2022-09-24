@@ -1,94 +1,169 @@
 package deque;
 
+import net.sf.saxon.functions.PositionAndLast;
+
+import java.security.SecureRandom;
+
 public class ArrayDeque<T> {
     private T[] items;
     private int size;
     private int nextFirst;
     private int nextLast;
 
-    public ArrayDeque(){
-    items = (T[]) new Object[8];
-    nextFirst = 3;
-    nextLast = 4;
-    size = 0;
+    public ArrayDeque() {
+        items = (T[]) new Object[8];
+        nextFirst = 3;
+        nextLast = 4;
+        size = 0;
     }
 
-    public void addFirst(T item){
-        if(IsFull()){
+    public void addFirst(T item) {
+        if (IsFull()) {
             resize();
         }
         items[nextFirst] = item;
         //if (nextFirst == nextLast){
-        if(nextFirst == 0){
+        if (nextFirst == 0) {
             nextFirst = nextFirst + items.length;
         }
         nextFirst--;
         size++;
     }
 
-    public void addLast(T item){
-        if(IsFull()){
+    public void addLast(T item) {
+        if (IsFull()) {
             resize();
         }
         items[nextLast] = item;
-        if(nextLast == items.length) {
+        if (nextLast == items.length) {
             nextLast = nextLast - items.length;
         }
         nextLast++;
         size++;
     }
-    public T remove(int index){
+
+    public T remove(int index) {
         T remove_value = items[index];
         items[index] = null;
         size--;
         return remove_value;
     }
 
-    public T removeFirst(){
-        if (size > 0){
-            int index_Fast;
-            if(nextFirst != items.length){
-            index_Fast = nextLast + 1;
-            }else{
-                index_Fast = 0;
-            }
-            nextFirst = index_Fast;
-            return remove(index_Fast);
-        }else{
+    private int get_Last_index() {
+        int index_Last;
+        if (nextLast != 0) {
+            index_Last = nextLast - 1;
+        } else {
+            index_Last = items.length;
+        }
+        return index_Last;
+    }
+
+    private int get_First_index() {
+        int index_First;
+        if (nextFirst != items.length) {
+            index_First = nextFirst + 1;
+        } else {
+            index_First = 0;
+        }
+        return index_First;
+    }
+
+    public T removeFirst() {
+        if (size > 0) {
+            int index_First = get_First_index();
+//            if(nextFirst != items.length){
+//            index_First = nextFirst + 1;
+//            }else{
+//                index_First = 0;
+//            }
+            nextFirst = index_First;
+            return remove(index_First);
+        } else {
             return null;
         }
 
     }
 
-    public T removeLast(){
-        if (size > 0){
-            int index_Last;
-            if(nextLast != 0){
-                index_Last = nextLast - 1;
-            }else{
-                index_Last = items.length;
-            }
+    public T removeLast() {
+        if (size > 0) {
+            int index_Last = get_Last_index();
+//            if(nextLast != 0){
+//                index_Last = nextLast - 1;
+//            }else{
+//                index_Last = items.length;
+//            }
             nextLast = index_Last;
             return remove(index_Last);
-        }else{
+        } else {
             return null;
         }
 
     }
 
-    public boolean IsFull(){
-        if(items.length == size){
+    public T get(int index) {
+        if (index >= this.size || index < 0) {
+            return null;
+        } else {
+            return items[index];
+        }
+    }
+
+    public void printDeque() {
+        if (size > 0) {
+            int Current_index = get_First_index();
+            for (int index = 0; index < this.size; index++) {
+                System.out.println(items[Current_index] + " ");
+                if (Current_index == items.length - 1) {
+                    Current_index = 0;
+                } else {
+                    Current_index = Current_index + 1;
+                }
+            }
+        }
+        System.lineSeparator();
+    }
+
+    public boolean IsFull() {
+        if (items.length == size) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public int size(){
+    public boolean isEmpty() {
+        return this.size == 0;
+    }
+
+    public int size() {
         return this.size;
     }
-    public void resize(){
 
+    private float Usage(){
+        return size / items.length;
+    }
+    public void resize() {
+        if(Usage() > 0.75){
+            resize_To(items.length * 2);
+        } else if (Usage() < 0.25 && items.length >= 16){
+            resize_To(items.length / 2);
+        }
+    }
+
+    private void resize_To(int Storage){
+        T[]  Newitems = (T[]) new Object[Storage];
+        int First_index = get_First_index();
+        int Last_index  = get_Last_index();
+        if(First_index > Last_index){
+            System.arraycopy(items, First_index, Newitems, 4, size - First_index);
+            System.arraycopy(items, 0, Newitems, 4 + size - First_index, Last_index +1);
+        } else {
+            System.arraycopy(items, First_index, Newitems, 4, size);
+        }
+        items = Newitems;
+        nextFirst = 3;
+        nextLast = nextFirst + size + 1;
     }
 
 }
