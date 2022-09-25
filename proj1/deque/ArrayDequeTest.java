@@ -113,12 +113,12 @@ public class ArrayDequeTest {
         for (int i = 0; i < 1000000; i++) {
             lld1.addLast(i);
         }
-        System.out.println("Final length of the array is " +lld1.length());
+        System.out.println("Final length of the array is " + lld1.length());
 
         for (double i = 0; i < 500000; i++) {
             assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
         }
-        System.out.println("Final length of the array is " +lld1.length());
+        System.out.println("Final length of the array is " + lld1.length());
 
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
@@ -130,9 +130,27 @@ public class ArrayDequeTest {
     public void bigArrayDequeTest_2() {
 
         ArrayDeque<Integer> lld2 = new ArrayDeque<Integer>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 999; i >= 0; i--) {
             lld2.addFirst(i);
         }
         assertEquals(lld2.size(), 1000);
+        System.out.println("First item is " + lld2.get(0));
+        for (int i = 999; i >= 0; i--) {
+            assertEquals("Should have the same value", i, lld2.get(i), 0.0);
+        }
+    }
+
+    @Test
+    public void bigArrayDequeTest_3() {
+
+        ArrayDeque<Integer> lld3 = new ArrayDeque<Integer>();
+        for (int i = 0; i < 1000; i++) {
+            lld3.addLast(i);
+        }
+        assertEquals(lld3.size(), 1000);
+        System.out.println("First item is " + lld3.get(0));
+        for (int i = 0; i < 1000; i++) {
+            assertEquals("Should have the same value", i, lld3.get(i), 0.0);
+        }
     }
 }

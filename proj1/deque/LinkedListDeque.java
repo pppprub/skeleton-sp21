@@ -2,11 +2,34 @@ package deque;
 
 import com.sun.tools.internal.xjc.api.TypeAndAnnotation;
 
-import java.util.Deque;
+import java.util.Iterator;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private int size = 0;
     private TNode sentinel;
+
+    public Iterator<T> iterator() {
+        return new LListDequeIterator();
+    }
+
+    private class LListDequeIterator implements Iterator<T> {
+        private TNode wizPosition;
+
+        public LListDequeIterator() {
+//            wizPosition = get_First_index();
+            wizPosition = sentinel.next;
+        }
+
+        public boolean hasNext() {
+            return !isEmpty() && wizPosition != sentinel;
+        }
+
+        public T next() {
+            T ReturnItem = wizPosition.item;
+            wizPosition = wizPosition.next;
+            return ReturnItem;
+        }
+    }
 
     public LinkedListDeque() {
         sentinel = new TNode(null, null, null);
@@ -47,9 +70,9 @@ public class LinkedListDeque<T> {
         size++;
     }
 
-    public boolean isEmpty() {
-        return this.size == 0;
-    }
+//    public boolean isEmpty() {
+//        return this.size == 0;
+//    }
 
     public int size() {
         return this.size;
@@ -115,27 +138,28 @@ public class LinkedListDeque<T> {
             return getRecursiveHelper(index - 1, Node.next);
         }
     }
-//    public Iterator<T> iterator(){
+
+    //    public Iterator<T> iterator(){
 //    }
 //    @Override
-//    public boolean equals(Object o){
-//       if(o == this){
-//           return true;
-//       }else if (o instanceof Deque<?>){
-//           Deque o_downcast = (Deque) o;
-//           if (this.size != o_downcast.size()){
-//               return false;
-//           } else {
-//           for(int index = 0; index < this.size; index++){
-//               if(this.get(index) != o_downcast.get(index)){
-//                   return false;
-//               }
-//           }
-//           return true;
-//           }
-//       } else {
-//           return false;
-//       }
-//    }
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o instanceof Deque) {
+            Deque<T> o_downcast = (Deque<T>) o;
+            if (this.size != o_downcast.size()) {
+                return false;
+            } else {
+                for (int index = 0; index < this.size; index++) {
+                    if (this.get(index) != o_downcast.get(index)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
 
 }

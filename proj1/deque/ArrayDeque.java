@@ -3,8 +3,9 @@ package deque;
 import net.sf.saxon.functions.PositionAndLast;
 
 import java.security.SecureRandom;
+import java.util.Iterator;
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int size;
     private int nextFirst;
@@ -110,7 +111,11 @@ public class ArrayDeque<T> {
         if (index >= this.size || index < 0) {
             return null;
         } else {
-            return items[index];
+            int currentNode = index + get_First_index();
+            if (currentNode >= items.length) {
+                currentNode = currentNode - items.length;
+            }
+            return items[currentNode];
         }
     }
 
@@ -137,8 +142,30 @@ public class ArrayDeque<T> {
         }
     }
 
-    public boolean isEmpty() {
-        return this.size == 0;
+    //    public boolean isEmpty() {
+//        return this.size == 0;
+//    }
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPosition;
+
+        public ArrayDequeIterator() {
+//            wizPosition = get_First_index();
+            wizPosition = 0;
+        }
+
+        public boolean hasNext() {
+            return wizPosition < size;
+        }
+
+        public T next() {
+            T ReturnItem = items[wizPosition];
+            wizPosition += 1;
+            return ReturnItem;
+        }
     }
 
     public int size() {
@@ -174,6 +201,26 @@ public class ArrayDeque<T> {
         items = Newitems;
         nextFirst = 3;
         nextLast = nextFirst + size + 1;
+    }
+
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o instanceof Deque) {
+            Deque<T> o_downcast = (Deque<T>) o;
+            if (this.size != o_downcast.size()) {
+                return false;
+            } else {
+                for (int index = 0; index < this.size; index++) {
+                    if (this.get(index) != o_downcast.get(index)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
 }
