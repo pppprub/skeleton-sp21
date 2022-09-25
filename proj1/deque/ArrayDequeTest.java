@@ -95,8 +95,6 @@ public class ArrayDequeTest {
     /* check if null is return when removing from an empty ArrayDeque. */
     public void emptyNullReturnTest() {
 
-//        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-
         ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
 
         boolean passed1 = false;
@@ -111,30 +109,25 @@ public class ArrayDequeTest {
     /* Add large number of elements to deque; check if order is correct. */
     public void bigArrayDequeTest() {
 
-//        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-
         ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
         for (int i = 0; i < 1000000; i++) {
             lld1.addLast(i);
         }
-//        int abc = lld1.get(0);
+        System.out.println("Final length of the array is " +lld1.length());
 
         for (double i = 0; i < 500000; i++) {
             assertEquals("Should have the same value", i, (double) lld1.removeFirst(), 0.0);
         }
+        System.out.println("Final length of the array is " +lld1.length());
 
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
-
-
+        System.out.println("Final length of the array is " + lld1.length());
     }
 
     @Test
-    /* Add large number of elements to deque; check if order is correct. */
     public void bigArrayDequeTest_2() {
-
-//        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
         ArrayDeque<Integer> lld2 = new ArrayDeque<Integer>();
         for (int i = 0; i < 1000; i++) {

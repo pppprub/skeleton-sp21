@@ -1,26 +1,37 @@
 package deque;
 
-import net.sf.saxon.functions.PositionAndLast;
+import java.util.Comparator;
 
-import java.security.SecureRandom;
+public class MaxArrayDeque<T> {
 
-public class ArrayDeque<T> {
     private T[] items;
     private int size;
     private int nextFirst;
     private int nextLast;
 
-    public ArrayDeque() {
+    public MaxArrayDeque() {
         items = (T[]) new Object[8];
         nextFirst = 3;
         nextLast = 4;
         size = 0;
     }
 
+    public MaxArrayDeque(Comparator<T> c) {
+        items = (T[]) new Object[8];
+        nextFirst = 3;
+        nextLast = 4;
+        size = 0;
+    }
+
+    public T max(){
+
+    }
+
+    public T max(Comparator<T> c){
+
+    }
+
     public void addFirst(T item) {
-//        if (IsFull()) {
-//            resize();
-//        }
         items[nextFirst] = item;
         //if (nextFirst == nextLast){
         if (nextFirst == 0) {
@@ -33,9 +44,6 @@ public class ArrayDeque<T> {
     }
 
     public void addLast(T item) {
-//        if (IsFull()) {
-//            resize();
-//        }
         items[nextLast] = item;
         if (nextLast == items.length - 1) {
             nextLast = nextLast - items.length + 1;
@@ -77,11 +85,6 @@ public class ArrayDeque<T> {
     public T removeFirst() {
         if (size > 0) {
             int index_First = get_First_index();
-//            if(nextFirst != items.length - 1){
-//            index_First = nextFirst + 1;
-//            }else{
-//                index_First = 0;
-//            }
             nextFirst = index_First;
             return remove(index_First);
         } else {
@@ -93,11 +96,6 @@ public class ArrayDeque<T> {
     public T removeLast() {
         if (size > 0) {
             int index_Last = get_Last_index();
-//            if(nextLast != 0){
-//                index_Last = nextLast - 1;
-//            }else{
-//                index_Last = items.length - 1;
-//            }
             nextLast = index_Last;
             return remove(index_Last);
         } else {
