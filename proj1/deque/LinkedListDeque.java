@@ -1,6 +1,5 @@
 package deque;
 
-import com.sun.tools.internal.xjc.api.TypeAndAnnotation;
 
 import java.util.Iterator;
 

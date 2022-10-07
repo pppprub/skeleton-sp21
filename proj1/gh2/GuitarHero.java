@@ -3,7 +3,6 @@ package gh2;
 import deque.ArrayDeque;
 import edu.princeton.cs.algs4.StdAudio;
 import edu.princeton.cs.algs4.StdDraw;
-import net.sf.saxon.expr.Component;
 
 /**
  * A client that uses the synthesizer package to replicate a plucked guitar string sound
